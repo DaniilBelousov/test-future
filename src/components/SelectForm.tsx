@@ -1,12 +1,23 @@
 import React from "react";
 
-const SelectForm = () => {
+interface Props {
+  value: string;
+  options: string[];
+  onChange?(newValue: React.FormEvent<HTMLSelectElement>): void;
+};
+
+function SelectForm(props: Props): React.ReactElement {
+  const { value, options, onChange } = props;
+
   return (
-    <select className="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
-      <option selected>Open this select menu</option>
-      <option value="1">One</option>
-      <option value="2">Two</option>
-      <option value="3">Three</option>
+    <select value={value} onChange={onChange} className="form-select form-select-sm mb-3">
+      {
+        options.map((value) => (
+          <option value={value} key={value} >
+            {value}
+          </option>
+        ))
+      }
     </select>
   );
 };
