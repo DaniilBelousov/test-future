@@ -1,6 +1,6 @@
 import React from "react";
 import "./Layout.css";
-import Header from "../pages/Header";
+import Header from "./Header";
 
 interface Props {
   children: React.ReactNode;

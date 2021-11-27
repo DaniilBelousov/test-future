@@ -1,4 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
+import { Link } from "react-router-dom";
 import "./BookCard.css";
 import { Book } from "../redux/types";
 
@@ -8,11 +9,16 @@ interface Props {
 
 const BookCard = (props: Props) => {
   const { data } = props;
+  const link = `/book/${data.id}`;
 
   return (
     <div className="container-book card">
       <div className="container-image">
-        <img className="image-book card-img-top" src={data.imageLinks} alt={data.title} />
+        <img
+          className="image-book card-img-top"
+          src={data?.imageLink}
+          alt={data.title}
+        />
       </div>
       <div className="card-body card-body-book">
         <div>
@@ -21,7 +27,7 @@ const BookCard = (props: Props) => {
           <p className="card-text mb-3">{data.authors ? data.authors.join(", ") : " The author is unknown"}</p>
         </div>
         <div className="btn-book">
-          <a href="#" className="btn btn-primary">Подробнее</a>
+          <Link to={link} className="btn btn-dark" >Подробнее</Link>
         </div>
       </div>
     </div>
