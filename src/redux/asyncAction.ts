@@ -1,16 +1,31 @@
 import { BooksAction, BooksActionTypes } from "./types";
 import { Dispatch } from "redux";
+import { QueryBooksVolume } from "../redux/types";
+import { fetchBooks } from "../api/booksApi";
 
-export const fetchBook = () => {
+export const fetchBook = (query: QueryBooksVolume) => {
   return async (dispatch: Dispatch<BooksAction>) => {
     try {
-      dispatch({type: BooksActionTypes.FETCH_BOOKS});
-      const response = await fetch("https://www.googleapis.com/books/v1/volumes?q=search+terms");
-      const json = await response.json();
-      setTimeout(() => {
-        dispatch({ type: BooksActionTypes.FETCH_BOOKS_SUCCESS, payload: json});
-        console.log(json);
-      }, 1000);
+      dispatch({ type: BooksActionTypes.FETCH_BOOKS, payload: query });
+      
+      const booksData = await fetchBooks(query);
+      
+      dispatch({ type: BooksActionTypes.FETCH_BOOKS_SUCCESS, payload: booksData });
+    } catch (error: any) {
+      dispatch({ type: BooksActionTypes.FETCH_BOOKS_ERROR, payload: "Ошибка" });
+      console.log(error);
+    }
+  }
+};
+
+export const fetchMoreBooks = (query: QueryBooksVolume) => {
+  return async (dispatch: Dispatch<BooksAction>) => {
+    try {
+      dispatch({ type: BooksActionTypes.FETCH_MORE, payload: query });
+      
+      const booksData = await fetchBooks(query);
+      
+      dispatch({ type: BooksActionTypes.FETCH_MORE_SUCCESS, payload: booksData });
     } catch (error: any) {
       dispatch({ type: BooksActionTypes.FETCH_BOOKS_ERROR, payload: "Ошибка" });
       console.log(error);

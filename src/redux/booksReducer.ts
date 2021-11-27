@@ -1,19 +1,34 @@
 import { BooksState, BooksAction, BooksActionTypes } from "./types";
 
 const initialState: BooksState = {
-  books: [],
+  booksVolume: {
+    data: [],
+    totalItems: 0,
+  },
   loading: false,
-  error: null
+  appStartedFirstTime: true,
+  error: null,
 };
 
 export const booksReducer = (state = initialState, action: BooksAction): BooksState => {
   switch (action.type) {
     case BooksActionTypes.FETCH_BOOKS:
-      return { loading: true, error: null, books: [] };
+      return { ...state, loading: true, appStartedFirstTime: false, currentBooksVolumeQuery: action.payload };
     case BooksActionTypes.FETCH_BOOKS_SUCCESS:
-      return { loading: false, error: null, books: action.payload };
+      return { ...state, loading: false, booksVolume: action.payload };
     case BooksActionTypes.FETCH_BOOKS_ERROR:
-      return { loading: true, error: action.payload, books: [] };
+      return { ...state, error: action.payload };
+    case BooksActionTypes.FETCH_MORE:
+      return { ...state, loading: true };
+    case BooksActionTypes.FETCH_MORE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        booksVolume: {
+          ...state.booksVolume,
+          data: [...state.booksVolume.data, ...action.payload.data]
+        }
+      };
     default:
       return state;
   }
